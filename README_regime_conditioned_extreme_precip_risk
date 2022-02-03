@@ -1,0 +1,112 @@
+########################################################################################
+#
+# README: script_regime_conditioned_extreme_precipitation_risk.py
+#
+# Paula Gonzalez & Emma Howard, University of Reading, 2021
+#
+########################################################################################
+
+Methodology description
+
+This code presents a methodology to derive extreme precipitation probability forecasts over
+South East Asia conditioned by the occurrence of two sets of weather regimes: a two-tiered 
+assignment, that first considers large-scale patterns and then assigns synoptic-scale 
+regimes, and a 'flat' classification, which only considers the synoptic scale. In the 
+'tiered' approach, the tier 1 large-scale regimes, which capture ENSO and seasonal 
+variations, are each partitioned into South East Asia regional clusters that capture 
+synoptic variability. 
+
+The method here considers an ensemble forecast of 850hPa wind field, computes the 
+probabilities of being in all the regimes and simultaneously considers the ERA5-derived 
+statistical link between the occurrence of a given regime and the probabilities of extreme 
+precipitation. By convoluting these sets of probabilities, the method produces a forecast for 
+the risk of precipitation exceedance conditioned by the weather regimes. 
+
+
+Software structure and components
+
+The code is contained in the file 'script_regime_conditioned_extreme_precip_risk.py' which 
+reads a given ensemble forecast for u,v @ 850 hPa and the corresponding forecast valid date 
+and lead time, and then makes use of the following modules:
+
+1) assign_flat_tiered_regime_probabilities(u_fcst,v_fcst)
+
+Computes the forecasted probabilities of being in each regime, for both the flat and 
+tiered sets. A sample script that allows to download UKMO GloSea5 s2s forecast data is included 
+within the 'additional_scripts' sub-directory.
+
+2) reg_cond_exceed_probs(prob_reg_flat,prob_reg_tiered, exceedance_args)
+
+considers:
+   - the ERA5-GPM derived probabilities of precipitation exceedance given each regime
+   - the above calculate forecast probabilities 
+   - an exceedance criteria (threshold or percentile, with a limited set of options)
+and calculates the forecasted probabilities of precipitation exceedance for that criteria 
+and for both the flat and tiered regimes. See note below for criteria options.
+
+3) clim_exceed_probs(date, exceedance_args)
+
+considers:
+   - the ERA5-GPM derived probabilities of precipitation exceedance given each regime
+   - the climatological probabilities of being in the regimes given the day of the year 
+   - an exceedance criteria (threshold or percentile, with a limited set of options)
+and calculates the forecasted probabilities of precipitation exceedance for that criteria
+and for both the flat and tiered regimes. See note below for criteria options.
+
+4) test_gpm_exceed(date, obs_precip_file,exceedance_args)
+
+If the forecast valid date is within the GPM coverage, this module allows the user to calculate the 
+observed areas of precipitation exceedance.
+
+5) plot_fcst_and_clim_exceed_prob(datet,lead,latitudes,longitudes,cond_pr_flat,cond_pr_tiered,cond_pr_flat_clim,cond_pr_tiered_clim, exceedance_args)
+
+This module allows the user to plot jointly the obtained forecasted flat and tiered regime-conditioned
+ probabilities of exceedance together with the corresponding climatological probabilities.
+
+6) plot_obs_precip_and_exceed(datet,latitudes,longitudes,obs_pr,obs_exceed, exceedance_args)
+
+This module allows the user to plot the observed exceedance regions together with the daily 
+precipitation field. A sample script to obtain a daily precipitation field from the NASA GPM 
+dataset is included within the 'additional_scripts' sub-directory.
+ 
+7) plot_relevant_regimes
+
+This module plots the forecasted flat and tiered regimes centroids and their contributions 
+towards extreme precipitation risk, indicating the forecasted probability of occurrence of each
+regime. Only the relevant regimes are plotted, ranging between 1 and the number of forecast 
+ensemble members. 
+
+
+#******************
+Exceedance criteria
+#******************
+
+
+The examples set up in this package allow to choose the following exceedance criteria options:
+
+'kind': either 'threshold' or 'percentile'
+'threshold': currently 25 is only allowed (meaning 25mm/day)
+'percentile': currently 75 and 90 are only allowed (meaningh 75th and 90th percentiles)
+'seas': indicates whether or not a seasonally-varying climatology should be considered. Currently, 
+	seas should always be set to True for kind 'percentile' and False for kind 'threshold'.
+'window': length in days of the seasonal window considered, currently only 60 is allowed.
+'res': resolution at which the GPM exceedance is considered. Currently, only the S2S-based '1p5degree' 
+	resolution is allowed.
+
+For the design of any other exceedance cases, additional python scripts are provided, based on
+obtaining the full GPM climatology from this dataset: https://gpm.nasa.gov/data/directory. These scripts, 
+included in the 'additional_scripts' sub-directory, can also be adapted to any other daily precipitation 
+climatological set and are titled:
+ 
+  script_calculate_precip_climatologies.py
+  script_calculate_regime_conditioned_precip_statistics.py 
+
+Running instructions are provided within. an input to these scripts are the climatological occurrences of 
+the 'flat' and 'tiered' rgeimes in ERA5, which are included as text .csv files in the 'input_data' 
+sub-directory. Users might find these of interest for different applications as well.
+
+
+# ---------------              Paula Gonzalez & Emma Howard, UoR, 2021            ------------------------
+####
+
+
