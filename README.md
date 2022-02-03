@@ -10,4 +10,6 @@ Howard, E., Thomas, S., Frame, T.H., Gonzalez, P.L., Methven, J., Martínez-Alva
 Gonzalez, P.L.M., Howard, E., Ferrett, S., Frame, T.H., Martı́nez-Alvarado,O., Methven, J., Woolnough, S. Weather regimes in Southeast Asia: Sub-seasonal predictability of the regimes and the associated high impact weather. Submitted to QJRM (December 2021).
 
 
-**PLEASE CONTACT ME IF YOU WANT ACCESS TO THE SAMPLE DATA USED IN THE CODE**
+WCSSP Southeast Asia: https://www.metoffice.gov.uk/research/approach/collaboration/newton/weather-and-climate-science-for-service-partnership-southeast-asia
+
+**NOTE:** Please contact me if you would like to get access to the sample data used in the repository.
